@@ -10,10 +10,9 @@ import Slider from 'react-slick'
 
 const Detail = () => {
 
-
-
-  const [selectedDays, setSelectedDays] = useState({ from: undefined, to: undefined });
-  const [showCalendar, setShowCalendar] = useState(false);
+  // 체크인, 체크아웃
+  const [selectedDays, setSelectedDays] = useState({ from: undefined, to: undefined })
+  const [showCalendar, setShowCalendar] = useState(false)
 
   const handleDayClick = (day) => {
     if (!selectedDays.from || (selectedDays.from && selectedDays.to)) {
@@ -25,11 +24,16 @@ const Detail = () => {
         from: selectedDays.from,
         to: day,
       };
-      setSelectedDays(range); // 선택한 범위 업데이트
+      setSelectedDays(range) // 선택한 범위 업데이트
+      setShowCalendar(false)
     }
   };
 
-  const handleButtonClick = () => {
+  const handleCheckinButtonClick = () => {
+    setShowCalendar(!showCalendar);
+  };
+  
+  const handleCheckoutButtonClick = () => {
     setShowCalendar(!showCalendar);
   };
 
@@ -40,42 +44,7 @@ const Detail = () => {
     today: new Date(),
   };
 
-  //   const Container = styled.div`
-  //   overflow:hidden;
-  // `;
-
-  // const StyledSlider = styled(Slider)`
-  //     .slick-slide div{
-  //       outline: none;
-  //     }
-  // `;
-
-  // const ImageContainer = styled.div`
-  //   margin: 0 16px;
-  // `;
-
-  // const Image = styled.img`
-  // max-width:100%;
-  // max-height:100%;
-  // `;
-
-  // const imgUrl = require('./image/스노우볼.jpg');
-
-  // const items = [
-  //   { id: 1, url: imgUrl },
-  //   { id: 2, url: imgUrl },
-  //   { id: 3, url: imgUrl },
-  //   { id: 4, url: imgUrl },
-  //   { id: 5, url: imgUrl },
-  // ];
-  //   const settings = {
-  //     dots: true,
-  //     infinite: true,
-  //     speed: 500,
-  //     slidesToShow: 1,
-  //     slidesToScroll: 1
-  //   };
-
+  // 더 알아보기 모달창
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -107,21 +76,6 @@ const Detail = () => {
           <h1>방 이름</h1>
           <div>지역</div>
           <Main_bg>
-            {/* <Container>
-        <h2> Single Item</h2>
-        <StyledSlider {...settings}
-        >
-          {items.map(item => {
-            return (
-              <div key={item.id}>
-                <ImageContainer>
-                  <Image src={item.url} />
-                </ImageContainer>
-              </div>
-            );
-          })}
-        </StyledSlider>
-      </Container> */}
             <Image_1><img src='/bnb1.jpg' width='560px' height='562px' /></Image_1>
             <Image_2><img src='/bnb1.jpg' width='270px' height='275px' /></Image_2>
             <Image_3><img src='/bnb1.jpg' width='270px' height='275px' /></Image_3>
@@ -163,13 +117,20 @@ const Detail = () => {
             <Line />
             <div>숙소 편의시설</div>
             <div>가져올 데이터</div>
+            <button>편의 시설 더 알아보기</button>
             <br/>
           </LeftContainer>
           <RightContainer>
             <Reservation_box>
               <div>
-                <CkeckinBtn onClick={handleButtonClick}>
-                  {showCalendar ? '닫기' : '체크인'}
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{fontSize: '20px', fontWeight: 'bold'}}>₩12,345</div>
+                /박</div>
+                <CkeckinBtn onClick={handleCheckinButtonClick}>
+                  {selectedDays.from ? selectedDays.from.toLocaleDateString() : '체크인'}
+                </CkeckinBtn>
+                <CkeckinBtn onClick={handleCheckoutButtonClick}>
+                  {selectedDays.to ? selectedDays.to.toLocaleDateString() : '체크아웃'}
                 </CkeckinBtn>
                 {showCalendar && (
                   <DayPicker
@@ -178,6 +139,8 @@ const Detail = () => {
                     modifiers={modifiers}
                     numberOfMonths={2}
                     disabledDays={{ before: new Date() }}
+                    // dir="rtl" //달력이 왼쪽으로 나오게 하기
+                    style={{ position: 'absolute', left: '0', background: 'white' }}
                   />
                 )}
               </div>
@@ -224,8 +187,8 @@ const ModalView = styled.div.attrs(() => ({
   align-items: center;
   flex-direction: column;
   border-radius: 20px;
-  width: 900px;
-  height: 700px;
+  width: 90%;
+  height: 70%;
   background-color: #ffffff;
   position: relative;
 
@@ -262,19 +225,19 @@ const ModalFont3 = styled.div`
   margin-bottom: 5px;
 `
 const Entire = styled.div`
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 `
 const Backdrop = styled.div`
   position: relative;
   top: 0;
   bottom: 0;
-  width: 100%;
-  height: 100%;
+  width: 88.88%;
+  height: fit-content;
   max-width: 1120px;
   padding: 0 20px;
   left: 50%;
   transform: translate(-50%, 0);
-  background-color: #c5cec7;
+  /* background-color: #c5cec7; */
 
   display: flex;
   flex-direction: column;
@@ -285,7 +248,7 @@ const RoomTitle = styled.div`
 `
 const LeftContainer = styled.div`
   /* background-color: #bcd4eb; */
-  max-width: 830px;
+  max-width: 58%;
   margin-left: 20px;
 `
 const Line = styled.div`
@@ -349,10 +312,13 @@ const Reservation_box = styled.div`
   box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
 `
 const CkeckinBtn = styled.button`
-  border: 1px solid rgb(255, 142, 142);
-  background-color: rgb(255, 142, 142);
-  height: 50px;
-  width: 100px;
+  border: 1px solid rgb(146, 146, 146);
+  border-radius: 12px;
+  min-height: 50px;
+  width: 50%;
   font-size: medium;
   font-weight: 700;
+  margin-top: 20px;
+  background-color: transparent;
+  padding: 26px 12px 10px;
 `
