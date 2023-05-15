@@ -7,6 +7,9 @@ import 'react-day-picker/dist/style.css';
 import Slider from 'react-slick'
 // import "slick-carousel/slick/slick.css";
 // import "slick-carousel/slick/slick-theme.css";
+import { FaWifi, FaTv } from 'react-icons/fa'
+import { VscGithubAlt } from "react-icons/vsc";
+import { SlGhost } from "react-icons/sl";
 
 const Detail = () => {
 
@@ -70,7 +73,7 @@ const Detail = () => {
   return (
 
     <Entire>
-
+      
       <Backdrop>
         <RoomTitle>
           <h1>방 이름</h1>
@@ -94,6 +97,7 @@ const Detail = () => {
               <NagativeButton onClick={openModalHandler}>더 알아보기</NagativeButton>
               {isOpen && (
                 <ModalBackground onClick={closeModalWithOutsideClick}>
+            
                   <ModalView onClick={(e) => e.stopPropagation()}>
                     <ModalExitBtnTwo onClick={closeModalHandler}>X</ModalExitBtnTwo>
                     <div className='desc'>
@@ -111,14 +115,30 @@ const Detail = () => {
                       <ModalFont3>에어커버를 통한 예약 보호에 대한 전체 내용은 도움말 센터에서 확인하세요.</ModalFont3>
                     </div>
                   </ModalView>
+                 
                 </ModalBackground>
               )}
             </div>
             <Line />
-            <div>숙소 편의시설</div>
-            <div>가져올 데이터</div>
-            <button>편의 시설 더 알아보기</button>
-            <br/>
+            <h3>숙소 편의시설</h3>
+            <Icon>
+              <FaWifi size={25} style={{ marginRight: '10px' }} />
+              <span style={{ marginRight: '20px' }}>무선 와이파이</span>
+            </Icon>
+            <Icon>
+              <FaTv size={25} style={{ marginRight: '10px' }} />
+              <span style={{ marginRight: '20px' }}>22인치 TV + 크롬캐스트</span>
+            </Icon>
+            <Icon>
+              <VscGithubAlt size={25} style={{ marginRight: '10px' }} />
+              <span style={{ marginRight: '20px' }}>고양이 있음</span>
+            </Icon>
+            <Icon>
+              <SlGhost size={25} style={{ marginRight: '10px' }} />
+              <span style={{ marginRight: '20px' }}>유령 없음</span>
+            </Icon>
+            <Facilities>편의 시설 더 알아보기</Facilities>
+            <br />
           </LeftContainer>
           <RightContainer>
             <Reservation_box>
@@ -144,6 +164,7 @@ const Detail = () => {
                   />
                 )}
               </div>
+              <PersonnelBtn>인원</PersonnelBtn>
             </Reservation_box>
           </RightContainer>
         </Big>
@@ -160,7 +181,7 @@ export default Detail
 const ModalBackground = styled.div`
     // Modal이 떴을 때의 배경을 깔아주는 CSS를 구현
     z-index: 1; //위치지정 요소
-    position: fixed;
+    position: absolute;
     display : flex;
     justify-content : center;
     align-items : center;
@@ -178,19 +199,24 @@ const NagativeButton = styled.button`
     text-decoration: underline;
     cursor: pointer;
 `
+
 const ModalView = styled.div.attrs(() => ({
   // attrs 메소드를 이용해서 아래와 같이 div 엘리먼트에 속성을 추가할 수 있다.
   role: 'dialog',
 }))`
   // Modal창 CSS를 구현합니다.
+  /* 
+  margin: 50px auto;
+  z-index: 9999; */
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
   border-radius: 20px;
   width: 90%;
-  height: 70%;
-  background-color: #ffffff;
-  position: relative;
+  height: 50%;
 
     >div.desc {
       margin: 50px;
@@ -313,12 +339,34 @@ const Reservation_box = styled.div`
 `
 const CkeckinBtn = styled.button`
   border: 1px solid rgb(146, 146, 146);
-  border-radius: 12px;
-  min-height: 50px;
+  border-radius: 8px;
+  /* min-height: 10px; */
   width: 50%;
   font-size: medium;
   font-weight: 700;
   margin-top: 20px;
   background-color: transparent;
-  padding: 26px 12px 10px;
+  padding: auto;
+`
+const PersonnelBtn = styled.button`
+  border: 1px solid rgb(146, 146, 146);
+  border-radius: 8px;
+  width: 100%;
+  font-size: medium;
+  font-weight: 700;
+  background-color: transparent;
+  padding: auto;
+`
+const Icon = styled.div`
+  display: flex;
+  align-Items: center; 
+  margin-Bottom: 10px;
+`
+const Facilities = styled.button`
+  border: 1px solid rgb(0, 0, 0);
+  background: rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `
