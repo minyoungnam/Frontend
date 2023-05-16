@@ -1,17 +1,49 @@
-import React from "react";
+import React, { useState, useRef} from "react";
 import { styled } from "styled-components";
 import { registration } from "../axios/api";
-import { VscGithubAlt } from "react-icons/vsc";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBuilding, faKitchenSet, faWifi } from "@fortawesome/free-solid-svg-icons";
 import { TbToolsKitchen2, TbAirConditioning, TbIroning2, TbWashDry1 } from "react-icons/tb";
-import { FaWifi, FaTv, FaHotel, FaWarehouse } from 'react-icons/fa'
+import { FaWifi, FaTv, FaHotel, FaWarehouse, FaUmbrellaBeach, FaHouseUser, FaSwimmingPool } from 'react-icons/fa'
 import { BsHouseFill } from 'react-icons/bs'
-import { MdApartment } from 'react-icons/md'
+import { MdApartment, MdForest, MdCastle, MdHouse, MdHouseSiding } from 'react-icons/md'
 import { CgSmartHomeWashMachine } from 'react-icons/cg'
-import { GiHeatHaze } from 'react-icons/gi'
+import { GiHeatHaze, GiCampingTent, GiFamilyHouse, GiMushroomHouse, GiTreeSwing } from 'react-icons/gi'
+import { RiHotelFill } from 'react-icons/ri'
+import { RiAncientGateFill, RiBuilding4Fill } from "react-icons/ri";
+import { InboxOutlined } from '@ant-design/icons';
+import { message, Upload } from 'antd';
+
+
+const { Dragger } = Upload;
+const props = {
+  name: 'file',
+  multiple: true,
+  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+  onChange(info) {
+    const { status } = info.file;
+    if (status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  onDrop(e) {
+    console.log('Dropped files', e.dataTransfer.files);
+  },
+};
+
 
 const Hosting = () => {
+
+  const renderRoomButton = (icon, label) => (
+    <RoomBtn>
+      {icon}
+      <Icon>{label}</Icon>
+    </RoomBtn>
+  )
+
   return (
     <>
       <Top_Box>
@@ -26,11 +58,17 @@ const Hosting = () => {
             type="text"
             placeholder='숙소 이름' />
         </InputWrap>
-        <Font1>숙소 주소</Font1>
+        <Font1>나라</Font1>
         <InputWrap>
           <Input
             type="text"
-            placeholder='숙소 주소' />
+            placeholder='나라' />
+        </InputWrap>
+        <Font1>도시</Font1>
+        <InputWrap>
+          <Input
+            type="text"
+            placeholder='도시' />
         </InputWrap>
         <Font1>숙소 가격</Font1>
         <InputWrap>
@@ -46,73 +84,60 @@ const Hosting = () => {
         </InputWrap>
         <Font1>룸 타입</Font1>
         <IconContainer>
-          <RoomBtn>
-            <BsHouseFill size={25} style={{ marginRight: '10px' }} />
-            <Icon>house</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <MdApartment size={25} style={{ marginRight: '10px' }} />
-            <Icon>apart</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <FaWarehouse size={25} style={{ marginRight: '10px' }} />
-            <Icon>condo</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <FaHotel size={25} style={{ marginRight: '10px' }} />
-            <Icon>hotel</Icon>
-          </RoomBtn>
+        {renderRoomButton(<BsHouseFill size={25} style={{ marginRight: '10px' }}/>, 'house')}
+        {renderRoomButton(<MdApartment size={25} style={{ marginRight: '10px' }}/>, 'apart')}
+        {renderRoomButton(<FaWarehouse size={25} style={{ marginRight: '10px' }}/>, 'condo')}
+        {renderRoomButton(<FaHotel size={25} style={{ marginRight: '10px' }}/>, 'hotel')}
+        </IconContainer>
+        <Font1>카테고리</Font1>
+        <IconContainer>
+          {renderRoomButton(<FaHouseUser size={25} style={{ marginRight: '10px' }} />, '방(전체)')}
+          {renderRoomButton(<RiBuilding4Fill size={25} style={{ marginRight: '10px' }} />, '최고의 전망')}
+          {renderRoomButton(<FaUmbrellaBeach size={25} style={{ marginRight: '10px' }} />, '해변 바로 앞')}
+          {renderRoomButton(<RiAncientGateFill size={25} style={{ marginRight: '10px' }} />, '한옥')}
+          {renderRoomButton(<GiTreeSwing size={25} style={{ marginRight: '10px' }} />, '한적한 시골')}
+          {renderRoomButton(<FaSwimmingPool size={25} style={{ marginRight: '10px' }} />, '멋진 수영장')}
+          {renderRoomButton(<MdForest size={25} style={{ marginRight: '10px' }} />, '국립공원')}
+          {renderRoomButton(<MdCastle size={25} style={{ marginRight: '10px' }} />, '캐슬')}
+          {renderRoomButton(<GiMushroomHouse size={25} style={{ marginRight: '10px' }} />, '기상천외한 숙소')}
+          {renderRoomButton(<RiHotelFill size={25} style={{ marginRight: '10px' }} />, '료칸')}
+          {renderRoomButton(<GiCampingTent size={25} style={{ marginRight: '10px' }} />, '캠핑장')}
+          {renderRoomButton(<GiFamilyHouse size={25} style={{ marginRight: '10px' }} />, '저택')}
+          {renderRoomButton(<MdHouse size={25} style={{ marginRight: '10px' }} />, '초소형 주택')}
+          {renderRoomButton(<MdHouseSiding size={25} style={{ marginRight: '10px' }} />, '통나무집')}
         </IconContainer>
         <Font1>편의 시설</Font1>
         <IconContainer>
-          <RoomBtn>
-            <FaWifi size={25} style={{ marginRight: '10px' }} />
-            <Icon>무선 인터넷</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <TbToolsKitchen2 size={25} style={{ marginRight: '10px' }} />
-            <Icon>주방</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <CgSmartHomeWashMachine size={25} style={{ marginRight: '10px' }} />
-            <Icon>세탁기</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <TbAirConditioning size={25} style={{ marginRight: '10px' }} />
-            <Icon>에어컨</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <GiHeatHaze size={25} style={{ marginRight: '10px' }} />
-            <Icon>난방</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <FaTv size={25} style={{ marginRight: '10px' }} />
-            <Icon>TV</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <TbWashDry1 size={25} style={{ marginRight: '10px' }} />
-            <Icon>건조기</Icon>
-          </RoomBtn>
-          <RoomBtn>
-            <TbIroning2 size={25} style={{ marginRight: '10px' }} />
-            <Icon>다리미</Icon>
-          </RoomBtn>
+          {renderRoomButton(<FaWifi size={25} style={{ marginRight: '10px' }}/>, '무선 인터넷')}
+          {renderRoomButton(<TbToolsKitchen2 size={25} style={{ marginRight: '10px' }}/>, '주방')}
+          {renderRoomButton(<CgSmartHomeWashMachine size={25} style={{ marginRight: '10px' }}/>, '세탁기')}
+          {renderRoomButton(<TbAirConditioning size={25} style={{ marginRight: '10px' }}/>, '에어컨')}
+          {renderRoomButton(<GiHeatHaze size={25} style={{ marginRight: '10px' }}/>, '난방')}
+          {renderRoomButton(<FaTv size={25} style={{ marginRight: '10px' }} />, 'TV')}
+          {renderRoomButton(<TbWashDry1 size={25} style={{ marginRight: '10px' }} />, '건조기')}
+          {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '다리미')}
+          {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '침실에 딸린 개인 욕실')}
+          {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '업무 전용 공간')}
         </IconContainer>
-        {/* <Checkbox>
-          <CheckboxInput type="checkbox" id="check1" />
-          <CheckboxLabel for="check1"></CheckboxLabel >
-          <style jsx>{`
-        ${CheckboxInput}:checked + ${CheckboxLabel}::after {
-          visibility: visible;
-        }
-      `}</style>
-        </Checkbox> */}
         <Font1>이미지</Font1>
+        <Dragger {...props} style={{ marginTop: '10px' }}>
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">Click or drag file to this area to upload</p>
+          <p className="ant-upload-hint">
+            Support for a single or bulk upload. Strictly prohibited from uploading company data or other
+            banned files.
+          </p>
+        </Dragger>
         <button>등록하기</button>
+
+
       </Container>
     </>
   )
 };
+
 
 export default Hosting;
 
@@ -127,6 +152,7 @@ const Container = styled.div`
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 50px;
 `
 const Font1 = styled.div`
   margin-top: 20px;
@@ -184,7 +210,6 @@ const Checkbox = styled.div`
 `
 const Icon = styled.div`
   margin-right: 20px;
-  margin-top: 10px;
   font-size: 18px;
 `
 const RoomBtn = styled.button`
