@@ -11,8 +11,9 @@ import { RiHotelFill } from 'react-icons/ri'
 import { RiAncientGateFill, RiBuilding4Fill } from "react-icons/ri";
 import { InboxOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
+import { useMutation } from "react-query";
 
-
+// 이미지 업로드
 const { Dragger } = Upload;
 const props = {
   name: 'file',
@@ -37,10 +38,73 @@ const props = {
 
 const Hosting = () => {
 
+  const [ inputValue, setInputValue ] = useState(null)
+
+  // const [ titleValue, setTitleValue ] = useState('')
+  const [ titleValue, setTitleValue ] = useState('')
+  const [ priceValue, setPriceValue ] = useState('')
+  const [ regionValue, setRegionValue ] = useState('')
+  const [ cityValue, setCityValue ] = useState('')
+  const [ capacityValue, setCapacityValue ] = useState('')
+  const [ roomTypeValue, setRoomTypeValue ] = useState('')
+  const [ amenitieValue, setAmenitieValue ] = useState('')
+  const [ categoriesValue, setCategoriesValue ] = useState('')
+
+  const inputValueHandler = (e) => {
+    setTitleValue(e.target.value)
+    setPriceValue(e.target.value)
+    setRegionValue(e.target.value)
+    setCityValue(e.target.value)
+    setCapacityValue(e.target.value)
+    setRoomTypeValue(e.target.value)
+    setAmenitieValue(e.target.value)
+    setCategoriesValue(e.target.value)
+  }
+
+  // 서버 통신 부분
+  const mutation = useMutation(registration, {
+    onSuccess: () => {
+      console.log('성공')
+    },
+    onError: (error) => {
+      alert(error) 
+    }
+  })
+
+  // const onSubmitHandler = async () => {
+  //   try {
+  //     mutation.mutate({
+  //       title: titleValue,
+  //       price: priceValue,
+  //       region: regionValue,
+  //       city: cityValue,
+  //       capacity: capacityValue,
+  //       roomType: roomTypeValue,
+  //       amenitie: amenitieValue,
+  //       categories: categoriesValue,
+  //     })
+  //   } catch (error) {
+
+  //   }
+  // }
+
+  const [selectedButtons, setSelectedButtons] = useState([])
+
+  const handleButtonClick = (value) => {
+    if (selectedButtons.includes(value)) {
+      setSelectedButtons(selectedButtons.filter((btn) => btn !== value))
+    } else {
+      setSelectedButtons([...selectedButtons, value])
+    }
+  }
+
+
+  // 룸타입, 카테고리
   const renderRoomButton = (icon, label) => (
-    <RoomBtn>
+    <RoomBtn onClick={()=>handleButtonClick(label)}
+    selected={selectedButtons.includes(label)}>
       {icon}
-      <Icon>{label}</Icon>
+      <Icon selected={selectedButtons.includes(label)}>{label}</Icon>
     </RoomBtn>
   )
 
@@ -52,35 +116,50 @@ const Hosting = () => {
       <Container>
         <div style={{ marginTop: '20px' }}>계정  호스팅</div>
         <div style={{ fontSize: '30px', fontWeight: '900', }}>호스팅</div>
+        </Container>
+        <form onSubmit={(e)=>{
+          e.preventDefault(e)
+        }}>
+        <Container>
         <Font1>숙소 이름</Font1>
         <InputWrap>
           <Input
             type="text"
-            placeholder='숙소 이름' />
+            placeholder='숙소 이름'
+            value={inputValue}
+            onChange={inputValueHandler} />
         </InputWrap>
         <Font1>나라</Font1>
         <InputWrap>
           <Input
             type="text"
-            placeholder='나라' />
+            placeholder='나라'
+            value={inputValue}
+            onChange={inputValueHandler} />
         </InputWrap>
         <Font1>도시</Font1>
         <InputWrap>
           <Input
             type="text"
-            placeholder='도시' />
+            placeholder='도시'
+            value={inputValue}
+            onChange={inputValueHandler} />
         </InputWrap>
         <Font1>숙소 가격</Font1>
         <InputWrap>
           <Input
             type="text"
-            placeholder='숙소 가격' />
+            placeholder='숙소 가격'
+            value={inputValue}
+            onChange={inputValueHandler} />
         </InputWrap>
         <Font1>숙소 인원</Font1>
         <InputWrap>
           <Input
             type="text"
-            placeholder='숙소 인원' />
+            placeholder='숙소 인원'
+            value={inputValue}
+            onChange={inputValueHandler} />
         </InputWrap>
         <Font1>룸 타입</Font1>
         <IconContainer>
@@ -130,10 +209,9 @@ const Hosting = () => {
             banned files.
           </p>
         </Dragger>
-        <button>등록하기</button>
-
-
+        <button type="submit">등록하기</button>
       </Container>
+      </form>
     </>
   )
 };
@@ -209,6 +287,7 @@ const Checkbox = styled.div`
   padding: 10px;
 `
 const Icon = styled.div`
+  color: ${props => (props.selected ? '#ff7676' : 'black')};
   margin-right: 20px;
   font-size: 18px;
 `
@@ -232,7 +311,7 @@ const RoomBtn = styled.button`
   display: flex;
   align-items: center;
   background-color: #ffffff;
-  border: 1px solid #dddddd;
+  border: ${props => (props.selected ? '1px solid #f89c9c' : '1px solid #dddddd')};
   border-radius: 8px;
   padding: 12px;
   cursor: pointer;
