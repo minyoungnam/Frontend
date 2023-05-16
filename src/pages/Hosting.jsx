@@ -46,19 +46,21 @@ const Hosting = () => {
   const [ regionValue, setRegionValue ] = useState('')
   const [ cityValue, setCityValue ] = useState('')
   const [ capacityValue, setCapacityValue ] = useState('')
-  const [ roomTypeValue, setRoomTypeValue ] = useState('')
-  const [ amenitieValue, setAmenitieValue ] = useState('')
-  const [ categoriesValue, setCategoriesValue ] = useState('')
 
-  const inputValueHandler = (e) => {
+  const titleValueHandler = (e) => {
     setTitleValue(e.target.value)
+  }
+  const priceValueHandler = (e) => {
     setPriceValue(e.target.value)
+  }
+  const regionValueHandler = (e) => {
     setRegionValue(e.target.value)
+  }
+  const cityValueHandler = (e) => {
     setCityValue(e.target.value)
+  }
+  const capacityValueHandler = (e) => {
     setCapacityValue(e.target.value)
-    setRoomTypeValue(e.target.value)
-    setAmenitieValue(e.target.value)
-    setCategoriesValue(e.target.value)
   }
 
   // 서버 통신 부분
@@ -126,40 +128,40 @@ const Hosting = () => {
           <Input
             type="text"
             placeholder='숙소 이름'
-            value={inputValue}
-            onChange={inputValueHandler} />
+            value={titleValue}
+            onChange={titleValueHandler} />
         </InputWrap>
         <Font1>나라</Font1>
         <InputWrap>
           <Input
             type="text"
             placeholder='나라'
-            value={inputValue}
-            onChange={inputValueHandler} />
+            value={regionValue}
+            onChange={regionValueHandler} />
         </InputWrap>
         <Font1>도시</Font1>
         <InputWrap>
           <Input
             type="text"
             placeholder='도시'
-            value={inputValue}
-            onChange={inputValueHandler} />
+            value={cityValue}
+            onChange={cityValueHandler} />
         </InputWrap>
         <Font1>숙소 가격</Font1>
         <InputWrap>
           <Input
             type="text"
             placeholder='숙소 가격'
-            value={inputValue}
-            onChange={inputValueHandler} />
+            value={priceValue}
+            onChange={priceValueHandler} />
         </InputWrap>
         <Font1>숙소 인원</Font1>
         <InputWrap>
           <Input
             type="text"
             placeholder='숙소 인원'
-            value={inputValue}
-            onChange={inputValueHandler} />
+            value={capacityValue}
+            onChange={capacityValueHandler} />
         </InputWrap>
         <Font1>룸 타입</Font1>
         <IconContainer>
