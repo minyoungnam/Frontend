@@ -6,6 +6,8 @@ import Hosting from '../pages/Hosting'
 import Mypage from '../pages/Mypage'
 import Reservation from '../pages/Reservation'
 import WishList from '../pages/WishList'
+import Signup from '../pages/Signup'
+import Login from '../pages/Login'
 
 const Router = () => {
   return (
@@ -17,6 +19,8 @@ const Router = () => {
             <Route path='mypage' element={<Mypage />}/>
             <Route path='reservation' element={<Reservation />}/>
             <Route path='wishlist' element={<WishList />}/>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
         </Routes>
     </BrowserRouter>
   )
