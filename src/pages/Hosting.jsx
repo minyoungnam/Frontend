@@ -10,6 +10,8 @@ import { RiHotelFill } from 'react-icons/ri'
 import { RiAncientGateFill, RiBuilding4Fill } from "react-icons/ri";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import StatusModal from "../components/StatusModal";
 
 
 
@@ -41,6 +43,68 @@ const Hosting = () => {
     setExpiredDateValue(e.target.value)
   }
 
+   // ^----- useState 선언 ----- //
+  // 선택된 카테고리를 저장하는 상태
+  const [selectedCategory, setSelectedCategory] = useState("방(전체)");
+
+  // 서버에서 받아온 데이터를 저장하는 상태
+  const [postData, setPostData] = useState([]);
+
+  // 로그인 상태를 위한 useState 선언
+  const [isLoggedIn, setIsLoggedIn] = useState(!!Cookies.get("token"));
+
+  // 모달을 위한 useState 선언
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const navigate = useNavigate();
+   // ^----- 모달 창에 관한 함수 ----- //
+  /**
+   * 모달 창을 여는 함수 입니다.
+   */
+  const openStatusModal = () => {
+    setIsStatusModalOpen(true);
+  };
+
+  /**
+   * 모달창을 닫는 함수 입니다.
+   */
+  const closeStatusModal = () => {
+    setIsStatusModalOpen(false);
+  };
+
+  /**
+   * 모달 창에서 로그인 버튼을 눌렀을 때 로그인 화면으로 넘어갑니다.
+   */
+  const handleLoginClick = () => {
+    closeStatusModal();
+    navigate("/login");
+  };
+
+  /**
+   * 모달 창에서 회원가입 버튼을 눌렀을 때 회원가입 화면으로 넘어갑니다.
+   */
+  const handleSignupClick = () => {
+    closeStatusModal();
+    navigate("/signup");
+  };
+
+  /**
+   * 모달 창에서 숙소 호스팅 하기를 눌렀을 때 숙소 호스팅 페이지로 넘어갑니다.
+   */
+  const handleHostingClick = () => {
+    closeStatusModal();
+    // hosting 페이지 추가
+    navigate("/hosting");
+  };
+
+  // ^----- 로그아웃 함수 ----- //
+  /**
+   * 실행시 로그아웃이 되는 함수 입니다. 쿠키에서 token값을 삭제합니다.
+   */
+  const handleLogOut = () => {
+    Cookies.remove("token");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
 
 
   // 중복선택 가능 버튼
@@ -72,7 +136,7 @@ const Hosting = () => {
       console.log(data)
 
       const formData = new FormData();
-      
+
       formData.append('image', data.image);
 
       const content = {
@@ -86,14 +150,14 @@ const Hosting = () => {
         categories: data.categories,
         expiredDate: Number(data.expiredDate),
       };
-      
+
       const blob = new Blob([JSON.stringify(content)], {
         // type에 JSON 타입 지정
         type: "application/json",
-        });
-        
+      });
+
       formData.append('content', blob);
-      
+
       // 블로그에 정리할 것,,,
       // formData.append('title', data.title);
       // formData.append('price', Number(data.price));
@@ -125,20 +189,21 @@ const Hosting = () => {
           Authorization: `Bearer ${token}`,
         }
       }
-  
+
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, config);
       console.log(response)
-      const alertMessage = 
-      `숙소명 : '${data.title}', 가격: '${data.price}, 나라 : '${data.region}', 도시: '${data.city},
+      const alertMessage =
+        `숙소명 : '${data.title}', 가격: '${data.price}, 나라 : '${data.region}', 도시: '${data.city},
       인원 : '${data.capacity}', 룸 타입: '${data.roomType}, 편의시설 : '${data.amenities}', 
       카테고리: '${data.categories}, 호스팅 기간 : ${data.expiredDate}'`
       alert(alertMessage)
       alert('등록완료!')
+      navigate("/");
     } catch (err) {
       alert('빈칸을 채워주세요')
       console.log(err)
       // 에러 처리 로직 추가
-    } 
+    }
   }
 
   const onSubmitHandler = async () => {
@@ -253,16 +318,16 @@ const Hosting = () => {
       // setFileImage(URL.createObjectURL(file));
       setFileImage(file)
 
-      
+
       const formData = new FormData();
       formData.append("image", file);
-  
+
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-  
+
       // 성공적인 처리 후의 로직 추가
       console.log(response);
     } catch (error) {
@@ -270,7 +335,7 @@ const Hosting = () => {
       console.error(error);
     }
   };
-  
+
 
   // 파일 삭제
   const deleteFileImage = () => {
@@ -280,141 +345,235 @@ const Hosting = () => {
 
   return (
     <>
-      <Top_Box>
-        <div style={{ paddingLeft: '80px' }}>비앤비</div>
-      </Top_Box>
-      <Container>
-        <div style={{ fontSize: '30px', fontWeight: '900', marginTop: '20px' }}>호스팅</div>
-      </Container>
-      <form onSubmit={(e) => {
-        e.preventDefault(e)
-        onSubmitHandler()
-      }}>
+      <StContainer>
+        {/* ^---------- Navigate ---------- */}
+        <StNavigate>
+          <StLogoBar>
+            <StLogoBarImg
+              src={process.env.PUBLIC_URL + "/assets/svg/Airbnb_Logo.svg"}
+              alt="Airbnb Logo"
+            />
+          </StLogoBar>
+          <StSearchBar>
+            <StSearchBarBtnBox>
+              <StSearchBarBtn type="button">
+                <div>어디든지</div>
+              </StSearchBarBtn>
+              <div>|</div>
+              <StSearchBarBtn type="button">
+                <div>언제든 일주일</div>
+              </StSearchBarBtn>
+              <div>|</div>
+              <StSearchBarBtn>
+                <div>게스트 추가</div>
+              </StSearchBarBtn>
+              <StSearchBarBtn>
+                <StSearchIcon
+                  src={
+                    process.env.PUBLIC_URL + "/assets/svg/search-icon-white.svg"
+                  }
+                  alt="Search Icon"
+                />
+              </StSearchBarBtn>
+            </StSearchBarBtnBox>
+          </StSearchBar>
+          <StLoginBar>
+            <StSearchText>당신의 공간을 에어빈앤비하세요</StSearchText>
+            <StLoginArea>
+              {/* ----- Login Icon Button ----- */}
+              {isLoggedIn ? (
+                <>
+                  <StLoginBtn onClick={openStatusModal}>
+                    <StLoginHImg
+                      src={process.env.PUBLIC_URL + "/assets/svg/menu-burger.svg"}
+                      alt="menu-burger"
+                    />
+                    <StLoginUImg
+                      src={process.env.PUBLIC_URL + "/assets/svg/tube.png"}
+                      alt="menu-burger"
+                      style={{
+                        width: "36px",
+                        padding: "0px",
+                        backgroundColor: "inherit",
+                      }}
+                    />
+                  </StLoginBtn>
+                  <StStatusModal
+                    isOpen={isStatusModalOpen}
+                    closeModal={closeStatusModal}
+                  >
+                    <StStatusModalBtn onClick={handleHostingClick}>
+                      <StStatusModalPL>숙소 호스팅 하기</StStatusModalPL>
+                    </StStatusModalBtn>
+                    <StStatusModalBtn onClick={handleLogOut}>
+                      <StStatusModalP>로그 아웃</StStatusModalP>
+                    </StStatusModalBtn>
+                  </StStatusModal>
+                </>
+              ) : (
+                <>
+                  <StLoginBtn onClick={openStatusModal}>
+                    <StLoginHImg
+                      src={process.env.PUBLIC_URL + "/assets/svg/menu-burger.svg"}
+                      alt="menu-burger"
+                    />
+                    <StLoginUImg
+                      src={process.env.PUBLIC_URL + "/assets/svg/icon-user.svg"}
+                      alt="menu-burger"
+                    />
+                  </StLoginBtn>
+                  <StStatusModal
+                    isOpen={isStatusModalOpen}
+                    closeModal={closeStatusModal}
+                  >
+                    <StStatusModalBtn onClick={handleLoginClick}>
+                      <StStatusModalPL>로그인</StStatusModalPL>
+                    </StStatusModalBtn>
+                    <StStatusModalBtn onClick={handleSignupClick}>
+                      <StStatusModalP>회원가입</StStatusModalP>
+                    </StStatusModalBtn>
+                  </StStatusModal>
+                </>
+              )}
+            </StLoginArea>
+          </StLoginBar>
+        </StNavigate>
+
+        <StHorizontalLine></StHorizontalLine>
         <Container>
-          <Font1>숙소 이름</Font1>
-          <InputWrap>
-            <Input
-              type="text"
-              placeholder='숙소 이름'
-              value={titleValue}
-              onChange={titleValueHandler} />
-          </InputWrap>
-          <Font1>나라</Font1>
-          <InputWrap>
-            <Input
-              type="text"
-              placeholder='나라'
-              value={regionValue}
-              onChange={regionValueHandler} />
-          </InputWrap>
-          <Font1>도시</Font1>
-          <InputWrap>
-            <Input
-              type="text"
-              placeholder='도시'
-              value={cityValue}
-              onChange={cityValueHandler} />
-          </InputWrap>
-          <Font1>숙소 가격</Font1>
-          <InputWrap>
-            <Input
-              type="text"
-              placeholder='숙소 가격'
-              value={priceValue}
-              onChange={priceValueHandler} />
-          </InputWrap>
-          <Font1>숙소 인원</Font1>
-          <InputWrap>
-            <Input
-              type="text"
-              placeholder='숙소 인원'
-              value={capacityValue}
-              onChange={capacityValueHandler} />
-          </InputWrap><Font1>호스팅 기간(숫자 입력)</Font1>
-          <Period>
-            0 : 향후 모든 날짜<br />
-            1 : 12개월 후<br />
-            2 : 9개월 후<br />
-            3 : 6개월 후<br />
-            4 : 3개월 후<br />
-            </Period>
-          <InputWrap>
-            <Input
-              type="text"
-              placeholder='0 or 1 or 2 or 3 or 4'
-              value={expiredDateValue}
-              onChange={expiredDateValueHandler} />
-          </InputWrap>
-          <Font1>룸 타입(택 1)</Font1>
-          <IconContainer>
-            {renderRoomButton(<BsHouseFill size={25} style={{ marginRight: '10px' }} />, 'house')}
-            {renderRoomButton(<MdApartment size={25} style={{ marginRight: '10px' }} />, 'apart')}
-            {renderRoomButton(<FaWarehouse size={25} style={{ marginRight: '10px' }} />, 'condo')}
-            {renderRoomButton(<FaHotel size={25} style={{ marginRight: '10px' }} />, 'hotel')}
-          </IconContainer>
-          <Font1>카테고리</Font1>
-          <IconContainer>
-            {renderRoomButton(<FaHouseUser size={25} style={{ marginRight: '10px' }} />, '방(전체)')}
-            {renderRoomButton(<RiBuilding4Fill size={25} style={{ marginRight: '10px' }} />, '최고의 전망')}
-            {renderRoomButton(<FaUmbrellaBeach size={25} style={{ marginRight: '10px' }} />, '해변 바로 앞')}
-            {renderRoomButton(<RiAncientGateFill size={25} style={{ marginRight: '10px' }} />, '한옥')}
-            {renderRoomButton(<GiTreeSwing size={25} style={{ marginRight: '10px' }} />, '한적한 시골')}
-            {renderRoomButton(<FaSwimmingPool size={25} style={{ marginRight: '10px' }} />, '멋진 수영장')}
-            {renderRoomButton(<MdForest size={25} style={{ marginRight: '10px' }} />, '국립공원')}
-            {renderRoomButton(<MdCastle size={25} style={{ marginRight: '10px' }} />, '캐슬')}
-            {renderRoomButton(<GiMushroomHouse size={25} style={{ marginRight: '10px' }} />, '기상천외한 숙소')}
-            {renderRoomButton(<RiHotelFill size={25} style={{ marginRight: '10px' }} />, '료칸')}
-            {renderRoomButton(<GiCampingTent size={25} style={{ marginRight: '10px' }} />, '캠핑장')}
-            {renderRoomButton(<GiFamilyHouse size={25} style={{ marginRight: '10px' }} />, '저택')}
-            {renderRoomButton(<MdHouse size={25} style={{ marginRight: '10px' }} />, '초소형 주택')}
-            {renderRoomButton(<MdHouseSiding size={25} style={{ marginRight: '10px' }} />, '통나무집')}
-          </IconContainer>
-          <Font1>편의 시설</Font1>
-          <IconContainer>
-            {renderRoomButton(<FaWifi size={25} style={{ marginRight: '10px' }} />, '무선 인터넷')}
-            {renderRoomButton(<TbToolsKitchen2 size={25} style={{ marginRight: '10px' }} />, '주방')}
-            {renderRoomButton(<CgSmartHomeWashMachine size={25} style={{ marginRight: '10px' }} />, '세탁기')}
-            {renderRoomButton(<TbAirConditioning size={25} style={{ marginRight: '10px' }} />, '에어컨')}
-            {renderRoomButton(<GiHeatHaze size={25} style={{ marginRight: '10px' }} />, '난방')}
-            {renderRoomButton(<FaTv size={25} style={{ marginRight: '10px' }} />, 'TV')}
-            {renderRoomButton(<TbWashDry1 size={25} style={{ marginRight: '10px' }} />, '건조기')}
-            {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '다리미')}
-            {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '침실에 딸린 개인 욕실')}
-            {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '업무 전용 공간')}
-          </IconContainer>
-
-          <Font1>이미지</Font1>
-          <div>
-                {fileImage && (
-                  <img
-                    alt="sample"
-                    src={fileImage}
-                    style={{ margin: "auto" }}
-                  />
-                )}
-                <div
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <input
-                    name="imgUpload"
-                    type="file"
-                    accept="image/*"
-                    onChange={saveFileImage}
-                  />
-
-                  <PublicBtn type="button" onClick={() => deleteFileImage()}>
-                    삭제
-                  </PublicBtn>
-                </div>
-                </div>
-        <ContainerBtn>
-          <PublicBtn1 type="submit" >등록하기</PublicBtn1>
-          </ContainerBtn>
+          <div style={{ fontSize: '30px', fontWeight: '900', marginTop: '20px' }}>호스팅</div>
         </Container>
-      </form>
+        <form onSubmit={(e) => {
+          e.preventDefault(e)
+          onSubmitHandler()
+        }}>
+          <Container>
+            <Font1>숙소 이름</Font1>
+            <InputWrap>
+              <Input
+                type="text"
+                placeholder='숙소 이름'
+                value={titleValue}
+                onChange={titleValueHandler} />
+            </InputWrap>
+            <Font1>나라</Font1>
+            <InputWrap>
+              <Input
+                type="text"
+                placeholder='나라'
+                value={regionValue}
+                onChange={regionValueHandler} />
+            </InputWrap>
+            <Font1>도시</Font1>
+            <InputWrap>
+              <Input
+                type="text"
+                placeholder='도시'
+                value={cityValue}
+                onChange={cityValueHandler} />
+            </InputWrap>
+            <Font1>숙소 가격</Font1>
+            <InputWrap>
+              <Input
+                type="text"
+                placeholder='숙소 가격'
+                value={priceValue}
+                onChange={priceValueHandler} />
+            </InputWrap>
+            <Font1>숙소 인원</Font1>
+            <InputWrap>
+              <Input
+                type="text"
+                placeholder='숙소 인원'
+                value={capacityValue}
+                onChange={capacityValueHandler} />
+            </InputWrap><Font1>호스팅 기간(숫자 입력)</Font1>
+            <Period>
+              0 : 향후 모든 날짜<br />
+              1 : 12개월 후<br />
+              2 : 9개월 후<br />
+              3 : 6개월 후<br />
+              4 : 3개월 후<br />
+            </Period>
+            <InputWrap>
+              <Input
+                type="text"
+                placeholder='0 or 1 or 2 or 3 or 4'
+                value={expiredDateValue}
+                onChange={expiredDateValueHandler} />
+            </InputWrap>
+            <Font1>룸 타입(택 1)</Font1>
+            <IconContainer>
+              {renderRoomButton(<BsHouseFill size={25} style={{ marginRight: '10px' }} />, 'house')}
+              {renderRoomButton(<MdApartment size={25} style={{ marginRight: '10px' }} />, 'apart')}
+              {renderRoomButton(<FaWarehouse size={25} style={{ marginRight: '10px' }} />, 'condo')}
+              {renderRoomButton(<FaHotel size={25} style={{ marginRight: '10px' }} />, 'hotel')}
+            </IconContainer>
+            <Font1>카테고리</Font1>
+            <IconContainer>
+              {renderRoomButton(<FaHouseUser size={25} style={{ marginRight: '10px' }} />, '방(전체)')}
+              {renderRoomButton(<RiBuilding4Fill size={25} style={{ marginRight: '10px' }} />, '최고의 전망')}
+              {renderRoomButton(<FaUmbrellaBeach size={25} style={{ marginRight: '10px' }} />, '해변 바로 앞')}
+              {renderRoomButton(<RiAncientGateFill size={25} style={{ marginRight: '10px' }} />, '한옥')}
+              {renderRoomButton(<GiTreeSwing size={25} style={{ marginRight: '10px' }} />, '한적한 시골')}
+              {renderRoomButton(<FaSwimmingPool size={25} style={{ marginRight: '10px' }} />, '멋진 수영장')}
+              {renderRoomButton(<MdForest size={25} style={{ marginRight: '10px' }} />, '국립공원')}
+              {renderRoomButton(<MdCastle size={25} style={{ marginRight: '10px' }} />, '캐슬')}
+              {renderRoomButton(<GiMushroomHouse size={25} style={{ marginRight: '10px' }} />, '기상천외한 숙소')}
+              {renderRoomButton(<RiHotelFill size={25} style={{ marginRight: '10px' }} />, '료칸')}
+              {renderRoomButton(<GiCampingTent size={25} style={{ marginRight: '10px' }} />, '캠핑장')}
+              {renderRoomButton(<GiFamilyHouse size={25} style={{ marginRight: '10px' }} />, '저택')}
+              {renderRoomButton(<MdHouse size={25} style={{ marginRight: '10px' }} />, '초소형 주택')}
+              {renderRoomButton(<MdHouseSiding size={25} style={{ marginRight: '10px' }} />, '통나무집')}
+            </IconContainer>
+            <Font1>편의 시설</Font1>
+            <IconContainer>
+              {renderRoomButton(<FaWifi size={25} style={{ marginRight: '10px' }} />, '무선 인터넷')}
+              {renderRoomButton(<TbToolsKitchen2 size={25} style={{ marginRight: '10px' }} />, '주방')}
+              {renderRoomButton(<CgSmartHomeWashMachine size={25} style={{ marginRight: '10px' }} />, '세탁기')}
+              {renderRoomButton(<TbAirConditioning size={25} style={{ marginRight: '10px' }} />, '에어컨')}
+              {renderRoomButton(<GiHeatHaze size={25} style={{ marginRight: '10px' }} />, '난방')}
+              {renderRoomButton(<FaTv size={25} style={{ marginRight: '10px' }} />, 'TV')}
+              {renderRoomButton(<TbWashDry1 size={25} style={{ marginRight: '10px' }} />, '건조기')}
+              {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '다리미')}
+              {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '침실에 딸린 개인 욕실')}
+              {renderRoomButton(<TbIroning2 size={25} style={{ marginRight: '10px' }} />, '업무 전용 공간')}
+            </IconContainer>
+
+            <Font1>이미지</Font1>
+            <div>
+              {fileImage && (
+                <img
+                  alt="sample"
+                  src={fileImage}
+                  style={{ margin: "auto" }}
+                />
+              )}
+              <div
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <input
+                  name="imgUpload"
+                  type="file"
+                  accept="image/*"
+                  onChange={saveFileImage}
+                />
+
+                <PublicBtn type="button" onClick={() => deleteFileImage()}>
+                  삭제
+                </PublicBtn>
+              </div>
+            </div>
+            <ContainerBtn>
+              <PublicBtn1 type="submit" >등록하기</PublicBtn1>
+            </ContainerBtn>
+          </Container>
+
+        </form>
+      </StContainer>
     </>
   )
 };
@@ -542,4 +701,139 @@ const ContainerBtn = styled.div`
 `;
 const Period = styled.div`
   margin: 10px;
+`
+const StContainer = styled.div`
+  /* background-color: gray; */
+  width: 100%;
+`;
+
+const StHorizontalLine = styled.div`
+  width: 100%;
+  height: 1.5px;
+  background-color: #e1e1e1;
+`;
+
+// ^---------- Navigate ---------- //
+
+const StNavigate = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 60px;
+  margin: auto;
+`;
+
+// *----- Logo Bar ----- //
+const StLogoBar = styled.div``;
+
+const StLogoBarImg = styled.img`
+  width: 7rem;
+  height: 5rem;
+`;
+
+// *----- Search Bar ----- //
+const StSearchBar = styled.div``;
+
+const StSearchBarBtnBox = styled.div`
+  display: flex;
+  border: 1px gray solid;
+  padding: 3px;
+  border-radius: 25px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+`;
+
+const StSearchBarBtn = styled.button`
+  background-color: inherit;
+  border: none;
+  margin: 5px 15px;
+  font-weight: 600;
+`;
+
+const StSearchIcon = styled.img`
+  display: block;
+  height: 20px;
+  width: 20px;
+  background-color: #e51e53;
+  padding: 6px;
+  border-radius: 25px;
+`;
+
+// *----- Search LoginBar ----- //
+const StLoginBar = styled.div`
+  display: flex;
+`;
+
+// -- Search Text -- //
+const StSearchText = styled.div`
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+`;
+
+// -- Login Area -- //
+const StLoginArea = styled.div`
+  margin-left: 30px;
+`;
+
+// login Btn //
+const StLoginBtn = styled.button`
+  background-color: inherit;
+  border: 1px gray solid;
+  border-radius: 25px;
+  padding: 7px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
+
+// 모달창
+const StStatusModal = styled(StatusModal)``;
+
+// 모달창 버튼
+const StStatusModalBtn = styled.button`
+  background-color: inherit;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #dbdbdb;
+  }
+`;
+
+// 모달창 회원가입 글씨
+const StStatusModalP = styled.p``;
+
+// 모달창 로그인 글씨
+const StStatusModalPL = styled.p`
+  font-weight: 600;
+`;
+
+// StLogin burger Img //
+const StLoginHImg = styled.img`
+  width: 16px;
+  padding: 0 7px;
+`;
+
+// StLogin User Img //
+const StLoginUImg = styled.img`
+  width: 16px;
+  padding: 7px;
+  border-radius: 50px;
+  background-color: #525252;
+`;
+
+// ^---------- Header ---------- //
+const StHeaderBox = styled.div`
+  display: grid;
+  grid-template-columns: 9fr 1fr;
+  width: 100%;
+  margin: 0 24px;
+`;
+
+const StHeader = styled.div`
+  padding: 24px 0;
 `
