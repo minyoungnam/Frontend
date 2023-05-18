@@ -49,25 +49,6 @@ const Hosting = () => {
 
   // 중복선택 가능 버튼
   const [selectedButtons, setSelectedButtons] = useState([])
-  // const handleButtonClick = (value) => {
-  //   setSelectedButtons((prevButtons) => {
-  //     if (prevButtons.includes(value)) {
-  //       return prevButtons.filter((btn) => btn !== value);
-  //     } else {
-  //       return [...prevButtons, value];
-  //     }
-  //   });
-  // };
-
-
-  // const handleCheckboxChange = (value) => {
-  //   if (selectedButtons.includes(value)) {
-  //     setSelectedButtons(selectedButtons.filter((btn) => btn !== value));
-  //   } else {
-  //     setSelectedButtons([...selectedButtons, value]);
-  //   }
-  // };
-
 
   // 룸타입, 카테고리 버튼
   const renderRoomButton = (icon, label) => (
@@ -92,95 +73,68 @@ const Hosting = () => {
     try {
       const token = Cookies.get("token");
       console.log(data)
-      const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('price', Number(data.price));
-      formData.append('region', data.region);
-      formData.append('city', data.city);
-      formData.append('capacity', Number(data.capacity));
-      formData.append('roomType', data.roomType);
-      formData.append('amenities', data.amenities);
-      formData.append('categories', data.categories);
-      formData.append('expiredDate', Number(data.expiredDate));
-      formData.append('image',data.image);
 
-      // formData.append("title", new Blob([JSON.stringify(data.title)], { type: "application/json" }));
-      // formData.append("price", new Blob([JSON.stringify(Number(data.price))], { type: "application/json" }));
-      // formData.append("region", new Blob([JSON.stringify(data.region)], { type: "application/json" }));
-      // formData.append("city", new Blob([JSON.stringify(data.city)], { type: "application/json" }));
-      // formData.append("capacity", new Blob([JSON.stringify(Number(data.capacity))], { type: "application/json" }));
-      // formData.append("roomType", new Blob([JSON.stringify(data.roomType)], { type: "application/json" }));
-      // formData.append("amenities", new Blob([JSON.stringify(data.amenities)], { type: "application/json" }));
-      // formData.append("categories", new Blob([JSON.stringify(data.categories)], { type: "application/json" }));
-      // formData.append("expiredDate", new Blob([JSON.stringify(Number(data.expiredDate))], { type: "application/json" }));
+      const formData = new FormData();
+
+      formData.append('image', data.image);
+
+      const content = {
+        title: data.title,
+        price: Number(data.price),
+        region: data.region,
+        city: data.city,
+        capacity: Number(data.capacity),
+        roomType: data.roomType,
+        amenities: data.amenities,
+        categories: data.categories,
+        expiredDate: Number(data.expiredDate),
+      };
+      
+      const blob = new Blob([JSON.stringify(content)], {
+        // type에 JSON 타입 지정
+        type: "application/json",
+        });
+        
+      formData.append('content', blob);
+      
+      // formData.append('title', data.title);
+      // formData.append('price', Number(data.price));
+      // formData.append('region', data.region);
+      // formData.append('city', data.city);
+      // formData.append('capacity', Number(data.capacity));
+      // formData.append('roomType', data.roomType);
+      // formData.append('amenities', data.amenities);
+      // formData.append('categories', data.categories);
+      // formData.append('expiredDate', Number(data.expiredDate));
+      // formData.append('image',data.image);
+
 
       for (let [key, value] of formData.entries()) { console.log(`${key}:`, value); }
 
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, {
+      // const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //     // 'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${token}`
+      //   }
+      // });
+      // console.log(response)
+      // // 성공적인 처리 후의 로직 추가
+      const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
-          // 'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         }
-      });
-      console.log(response)
-      // 성공적인 처리 후의 로직 추가
+      };
+  
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, config);
+      console.log(response);
     } catch (err) {
       alert('에러 발생')
       console.log(err)
       // 에러 처리 로직 추가
     } 
   }
-  // const registration = async (data) => {
-  //   try {
-  //     const token = Cookies.get("token");
-  //     const formData = new FormData();
-  //     formData.append('title', data.title);
-  //     formData.append('price', Number(data.price));
-  //     formData.append('region', data.region);
-  //     formData.append('city', data.city);
-  //     formData.append('capacity', Number(data.capacity));
-  //     formData.append('roomType', data.roomType);
-  //     formData.append('amenities', data.amenities);
-  //     formData.append('categories', data.categories);
-  //     formData.append('expiredDate', Number(data.expiredDate));
-  
-  //     const body = {
-  //       title: data.title,
-  //       price: Number(data.price),
-  //       region: data.region,
-  //       city: data.city,
-  //       capacity: Number(data.capacity),
-  //       roomType: data.roomType,
-  //       amenities: data.amenities,
-  //       categories: data.categories,
-  //       expiredDate: Number(data.expiredDate),
-  //     };
-  
-  //     formData.append('data', JSON.stringify(body));
-  
-  //     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, {
-  //       method: 'POST',
-  //       body: formData,
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  
-  //     if (response.ok) {
-  //       const result = await response.json();
-  //       console.log(result);
-  //       // 성공적인 처리 후의 로직 추가
-  //     } else {
-  //       // 응답이 오류인 경우
-  //       throw new Error('파일 전송 실패');
-  //     }
-  //   } catch (err) {
-  //     alert('에러 발생');
-  //     console.log(err);
-  //     // 에러 처리 로직 추가
-  //   }
-  // };
 
   const onSubmitHandler = async () => {
     try {
@@ -276,48 +230,29 @@ const Hosting = () => {
         image: fileImage
       };
       await registration(data);
-      console.log(data)
+      // console.log(data)
     } catch (error) {
       // 에러 처리 로직 추가
     }
   }
-  // const { Dragger } = Upload;
-  // const props = {
-  //   name: 'file',
-  //   multiple: true,
-  //   action: 'http://13.124.209.170:8080/rooms/host', // ?
-  //   accept: '.jpg, .jpeg, .png',
-  //   onChange(info) {
-  //     const { status } = info.file;
-  //     if (status !== 'uploading') {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (status === 'done') {
-  //       message.success(`${info.file.name} file uploaded successfully.`);
-  //     } else if (status === 'error') {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  //   onDrop(e) {
-  //     console.log('Dropped files', e.dataTransfer.files);
-  //   },
-  // };
+
 
   //파일 미리볼 url을 저장해줄 state
   const [fileImage, setFileImage] = useState("");
   // console.log(fileImage)
   // 파일 저장
   const saveFileImage = async (e) => {
+    e.preventDefault(e)
     try {
       const file = e.target.files[0];
-      setFileImage(URL.createObjectURL(file));
-      // setFileImage(file)
+      // setFileImage(URL.createObjectURL(file));
+      setFileImage(file)
 
       
       const formData = new FormData();
       formData.append("image", file);
   
-      const response = await axios.post("http://13.124.209.170:8080/rooms/host", formData, {
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -401,19 +336,6 @@ const Hosting = () => {
           </InputWrap>
           <Font1>룸 타입(택 1)</Font1>
           <IconContainer>
-            {/* <div>
-              {checkboxOptions.map((option) => (
-                <label key={option.value}>
-                  <input
-                    type="checkbox"
-                    value={option.value}
-                    checked={selectedButtons.includes(option.value)}
-                    onChange={() => handleCheckboxChange(option.value)}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div> */}
             {renderRoomButton(<BsHouseFill size={25} style={{ marginRight: '10px' }} />, 'house')}
             {renderRoomButton(<MdApartment size={25} style={{ marginRight: '10px' }} />, 'apart')}
             {renderRoomButton(<FaWarehouse size={25} style={{ marginRight: '10px' }} />, 'condo')}
@@ -472,19 +394,9 @@ const Hosting = () => {
                     onChange={saveFileImage}
                   />
 
-                  <button
-                    type="button"
-                    style={{
-                      backgroundColor: "gray",
-                      color: "white",
-                      width: "55px",
-                      height: "40px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => deleteFileImage()}
-                  >
+                  <PublicBtn type="button" onClick={() => deleteFileImage()}>
                     삭제
-                  </button>
+                  </PublicBtn>
                 </div>
                 </div>
           {/* <Dragger {...props} style={{ marginTop: '10px' }}>
@@ -497,7 +409,7 @@ const Hosting = () => {
             banned files.
           </p>
         </Dragger> */}
-          <button type="submit" >등록하기</button>
+          <PublicBtn type="submit" >등록하기</PublicBtn>
         </Container>
       </form>
     </>
@@ -547,33 +459,6 @@ const InputWrap = styled.div`
       border: 1px solid #f07665;
   }
 `
-// const CheckboxInput = styled.input`
-//   display: none;
-// `;
-
-// const CheckboxLabel = styled.label`
-//   display: block;
-//   width: 20px;
-//   height: 20px;
-//   border: 3px solid #707070;
-//   position: relative;
-//   margin-top: 5px;
-
-//   &::after {
-//     content: '✔';
-//     font-size: 17px;
-//     width: 20px;
-//     height: 20px;
-//     text-align: center;
-//     position: absolute;
-//     left: 0;
-//     top: 0;
-//     visibility: hidden;
-//   }
-// `
-// const Checkbox = styled.div`
-//   padding: 10px;
-// `
 const Icon = styled.div`
   color: ${props => (props.selected ? '#ff7676' : 'black')};
   margin-right: 20px;
@@ -634,4 +519,15 @@ const IconContainer = styled.div`
   @media screen and (max-width: 400px) {
     grid-template-columns: 1fr;
   }
+`
+const PublicBtn = styled.button`
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #888888;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 10px;
 `
