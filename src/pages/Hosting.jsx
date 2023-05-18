@@ -553,13 +553,23 @@ const Hosting = () => {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
+                  
                 }}
               >
+                {/* <CustomFileButton htmlFor="imgUpload">
+                  파일 선택
+                </CustomFileButton> */}
                 <input
                   name="imgUpload"
                   type="file"
                   accept="image/*"
                   onChange={saveFileImage}
+                  style={{display: 'inline-block',
+                    backgroundcolor: '#ccc',
+                    color: '#fff',
+                    padding: '8px 16px',
+                    borderradius: '4px',
+                    cursor: 'pointer'}}
                 />
 
                 <PublicBtn type="button" onClick={() => deleteFileImage()}>
@@ -837,3 +847,14 @@ const StHeaderBox = styled.div`
 const StHeader = styled.div`
   padding: 24px 0;
 `
+const CustomFileButton = styled.label`
+  display: inline-block;
+  background-color: #ccc;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+const FileInput = styled.input`
+  display: none; /* 기본 파일 선택 버튼을 숨김 */
+`;

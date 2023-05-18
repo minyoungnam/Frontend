@@ -6,8 +6,12 @@ import StatusModal from "../components/StatusModal";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useInView } from "react-intersection-observer";
 
 const Home = () => {
+  // 무한 스크롤
+  const [ref, inView] = useInView();
+
   // ^----- useState 선언 ----- //
   // 선택된 카테고리를 저장하는 상태
   const [selectedCategory, setSelectedCategory] = useState("방(전체)");
@@ -207,7 +211,7 @@ const Home = () => {
   }, [selectedCategory]);
 
   return (
-    <StContainer>
+    <StContainer> 
       {/* ^---------- Navigate ---------- */}
       <StNavigate>
         <StLogoBar>
