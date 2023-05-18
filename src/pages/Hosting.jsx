@@ -70,12 +70,13 @@ const Hosting = () => {
 
   // 호스팅하기
   const registration = async (data) => {
+
     try {
       const token = Cookies.get("token");
       console.log(data)
 
       const formData = new FormData();
-
+      
       formData.append('image', data.image);
 
       const content = {
@@ -109,7 +110,7 @@ const Hosting = () => {
       // formData.append('image',data.image);
 
 
-      for (let [key, value] of formData.entries()) { console.log(`${key}:`, value); }
+      // for (let [key, value] of formData.entries()) { console.log(`${key}:`, value); }
 
       // const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, {
       //   headers: {
@@ -120,17 +121,24 @@ const Hosting = () => {
       // });
       // console.log(response)
       // // 성공적인 처리 후의 로직 추가
+
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         }
-      };
+      }
   
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, config);
-      console.log(response);
+      
+      const alertMessage = 
+      `숙소명 : '${data.title}', 가격: '${data.price}, 나라 : '${data.region}', 도시: '${data.city},
+      인원 : '${data.capacity}', 룸 타입: '${data.roomType}, 편의시설 : '${data.amenities}', 
+      카테고리: '${data.categories}, 호스팅 기간 : ${data.expiredDate}'`
+      alert(alertMessage)
+      alert('등록완료!')
     } catch (err) {
-      alert('에러 발생')
+      alert('빈칸을 채워주세요')
       console.log(err)
       // 에러 처리 로직 추가
     } 
@@ -279,8 +287,7 @@ const Hosting = () => {
         <div style={{ paddingLeft: '80px' }}>비앤비</div>
       </Top_Box>
       <Container>
-        <div style={{ marginTop: '20px' }}>계정  호스팅</div>
-        <div style={{ fontSize: '30px', fontWeight: '900', }}>호스팅</div>
+        <div style={{ fontSize: '30px', fontWeight: '900', marginTop: '20px' }}>호스팅</div>
       </Container>
       <form onSubmit={(e) => {
         e.preventDefault(e)
@@ -326,7 +333,14 @@ const Hosting = () => {
               placeholder='숙소 인원'
               value={capacityValue}
               onChange={capacityValueHandler} />
-          </InputWrap><Font1>호스팅 기간</Font1>
+          </InputWrap><Font1>호스팅 기간(숫자 입력)</Font1>
+          <Period>
+            0 : 향후 모든 날짜<br />
+            1 : 12개월 후<br />
+            2 : 9개월 후<br />
+            3 : 6개월 후<br />
+            4 : 3개월 후<br />
+            </Period>
           <InputWrap>
             <Input
               type="text"
@@ -409,7 +423,9 @@ const Hosting = () => {
             banned files.
           </p>
         </Dragger> */}
-          <PublicBtn type="submit" >등록하기</PublicBtn>
+        <ContainerBtn>
+          <PublicBtn1 type="submit" >등록하기</PublicBtn1>
+          </ContainerBtn>
         </Container>
       </form>
     </>
@@ -530,4 +546,29 @@ const PublicBtn = styled.button`
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   margin-top: 10px;
+`
+const PublicBtn1 = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f89c9c;
+  border: 1px solid #f89c9c;
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 10px;
+  width: 30%;
+  font-weight: 700;
+  font-size: larger;
+  color: white;
+`
+const ContainerBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; 화면 전체 높이를 기준으로 가운데 정렬하려면 사용합니다 */
+`;
+const Period = styled.div`
+  margin: 10px;
 `
