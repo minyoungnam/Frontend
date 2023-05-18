@@ -641,23 +641,10 @@ const StCardPhoto = styled.div`
   position: relative;
 `;
 
-const StAiOutlineHeart = styled(AiOutlineHeart)`
-  position: absolute;
-  font-size: 30px;
-  top: 10px;
-  right: 20px;
-`;
-
-const StFcLike = styled(FcLike)`
-  position: absolute;
-  font-size: 30px;
-  top: 10px;
-  right: 20px;
-`;
-
 const StCardPhotoImg = styled.img`
   /* width: 240px; */
   width: 100%;
+  height: 240px;
   border-radius: 10px;
 `;
 
