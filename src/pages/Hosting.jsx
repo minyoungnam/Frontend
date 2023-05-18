@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { styled } from "styled-components";
-// import { registration } from "../axios/api";
 import { TbToolsKitchen2, TbAirConditioning, TbIroning2, TbWashDry1 } from "react-icons/tb";
 import { FaWifi, FaTv, FaHotel, FaWarehouse, FaUmbrellaBeach, FaHouseUser, FaSwimmingPool } from 'react-icons/fa'
 import { BsHouseFill } from 'react-icons/bs'
@@ -9,12 +8,9 @@ import { CgSmartHomeWashMachine } from 'react-icons/cg'
 import { GiHeatHaze, GiCampingTent, GiFamilyHouse, GiMushroomHouse, GiTreeSwing } from 'react-icons/gi'
 import { RiHotelFill } from 'react-icons/ri'
 import { RiAncientGateFill, RiBuilding4Fill } from "react-icons/ri";
-import { InboxOutlined } from '@ant-design/icons'
-import { Collapse, message, Upload } from 'antd';
-import { useMutation } from "react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
-import jwtDecode from "jwt-decode";
+
 
 
 const Hosting = () => {
@@ -98,6 +94,7 @@ const Hosting = () => {
         
       formData.append('content', blob);
       
+      // 블로그에 정리할 것,,,
       // formData.append('title', data.title);
       // formData.append('price', Number(data.price));
       // formData.append('region', data.region);
@@ -130,7 +127,7 @@ const Hosting = () => {
       }
   
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, config);
-      
+      console.log(response)
       const alertMessage = 
       `숙소명 : '${data.title}', 가격: '${data.price}, 나라 : '${data.region}', 도시: '${data.city},
       인원 : '${data.capacity}', 룸 타입: '${data.roomType}, 편의시설 : '${data.amenities}', 
@@ -413,16 +410,6 @@ const Hosting = () => {
                   </PublicBtn>
                 </div>
                 </div>
-          {/* <Dragger {...props} style={{ marginTop: '10px' }}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">Click or drag file to this area to upload</p>
-          <p className="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-            banned files.
-          </p>
-        </Dragger> */}
         <ContainerBtn>
           <PublicBtn1 type="submit" >등록하기</PublicBtn1>
           </ContainerBtn>
@@ -481,22 +468,6 @@ const Icon = styled.div`
   font-size: 18px;
 `
 const RoomBtn = styled.button`
-  /* border-color: transparent;
-  box-shadow: 0 0 0 2px #000000;
-  background-color: #F7F7F7;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #DDDDDD;
-  cursor: pointer;
-  transition: box-shadow 0.2s ease,transform 0.1s ease;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 88px;
-  display: flex;
-  box-sizing: border-box;
-  width: 20%;
-  height: 100%;
-  outline: none; */
   display: flex;
   align-items: center;
   background-color: #ffffff;

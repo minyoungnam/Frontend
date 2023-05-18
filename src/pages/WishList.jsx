@@ -1,16 +1,30 @@
 import React from "react";
 import { styled } from "styled-components";
+import axios from "axios";
+import { useQuery } from "react-query";
 
 const WishList = () => {
+
+  // const get_My_WishList = async () => {
+  //   const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/wishlists`)
+  //   console.log(response)
+  //   return response.data
+  // }
+  // const { isError: isErrorWishList, isLoading: isLoadingWishList, data: WishListData } = useQuery("get_My_WishList", get_My_WishList)
+
+
   return (
     <>
       <Top_Box>
-        <div style={{paddingLeft: '80px'}}>에어비앤비</div>
+        <div style={{ paddingLeft: '80px' }}>에어비앤비</div>
       </Top_Box>
       <W_L_Box>
-        <h1 style={{paddingLeft: '80px'}}>위시리스트</h1>
+        <h1 style={{ paddingLeft: '80px' }}>위시리스트</h1>
       </W_L_Box>
-      <Image_save></Image_save>
+      <Container>
+        <Image_save></Image_save>
+      </Container>
+      <Title>설정한 타이틀</Title>
     </>
   )
 };
@@ -32,7 +46,6 @@ const Image_save = styled.div`
   /* border-radius: 12px;
   background: transparent;
   border: none; */
-  margin-left: 100px;
   width: 300px;
   height: 300px;
   background-color: #ccc; /* 이미지가 없을 때 보일 색상 */
@@ -40,4 +53,18 @@ const Image_save = styled.div`
   background-size: cover;
   background-position: center;
   border-radius: 8px;
+`
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  /* align-items: column;
+  justify-content: center; */
+  margin-left: 100px;
+`
+const Title = styled.div`
+  margin-top: 20px;
+  margin-left: 110px;
+  font-size: 25px;
+  font-weight: 800;
 `
