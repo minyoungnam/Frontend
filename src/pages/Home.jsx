@@ -135,6 +135,36 @@ const Home = () => {
     }
   };
 
+  // 멋진 수영장 가져오는 함수
+  const getPostTndudwkd = async () => {
+    try {
+      const response = await authApi.get(`/rooms/?categories=멋진 수영장`);
+      setPostData(response.data.content);
+    } catch (error) {
+      console.log("✨ ‣ getPostGoqus ‣ error:", error);
+    }
+  };
+
+  // 국립 공원 가져오는 함수
+  const getPostRhddnjs = async () => {
+    try {
+      const response = await authApi.get(`/rooms/?categories=국립 공원`);
+      setPostData(response.data.content);
+    } catch (error) {
+      console.log("✨ ‣ getPostGoqus ‣ error:", error);
+    }
+  };
+
+  // 캐슬 가져오는 함수
+  const getPostZotmf = async () => {
+    try {
+      const response = await authApi.get(`/rooms/?categories=캐슬`);
+      setPostData(response.data.content);
+    } catch (error) {
+      console.log("✨ ‣ getPostGoqus ‣ error:", error);
+    }
+  };
+
   // 선택한 카테고리에 따라 데이터를 가져오는 함수
   const fetchDataByCategory = async (category) => {
     setSelectedCategory(category);
@@ -151,9 +181,14 @@ const Home = () => {
       case "한옥":
         await getPostGksdhr();
         break;
-      case "한적한 시골":
-        await getPostTlrhf();
+      case "멋진 수영장":
+        await getPostTndudwkd();
         break;
+      case "국립 공원":
+        await getPostRhddnjs();
+        break;
+      case "캐슬":
+        await getPostZotmf();
       default:
         // setPostData([]);
         await getPostAll();
@@ -291,15 +326,15 @@ const Home = () => {
               <StNaviIconImg src="https://a0.muscache.com/pictures/6ad4bd95-f086-437d-97e3-14d12155ddfe.jpg" />
               <StNaviIconP>한적한 시골</StNaviIconP>
             </StNaviIconBtn>
-            <StNaviIconBtn>
+            <StNaviIconBtn onClick={() => fetchDataByCategory("멋진 수영장")}>
               <StNaviIconImg src="https://a0.muscache.com/pictures/3fb523a0-b622-4368-8142-b5e03df7549b.jpg" />
               <StNaviIconP>멋진 수영장</StNaviIconP>
             </StNaviIconBtn>
-            <StNaviIconBtn>
+            <StNaviIconBtn onClick={() => fetchDataByCategory("국립 공원")}>
               <StNaviIconImg src="https://a0.muscache.com/pictures/c0a24c04-ce1f-490c-833f-987613930eca.jpg" />
               <StNaviIconP>국립 공원</StNaviIconP>
             </StNaviIconBtn>
-            <StNaviIconBtn>
+            <StNaviIconBtn onClick={() => fetchDataByCategory("캐슬")}>
               <StNaviIconImg src="https://a0.muscache.com/pictures/1b6a8b70-a3b6-48b5-88e1-2243d9172c06.jpg" />
               <StNaviIconP>캐슬</StNaviIconP>
             </StNaviIconBtn>
@@ -360,6 +395,7 @@ const Home = () => {
                     </StCardPhoto>
                     <StCardTextBoxBtn>
                       <StCardTextBoxP>{item.region}</StCardTextBoxP>
+                      <StCardTextBoxP>호스트: {item.host}</StCardTextBoxP>
                       <StCardPriceBox>
                         {item.price
                           .toString()
@@ -628,7 +664,8 @@ const StCardPhotoImg = styled.img`
 const StCardTextBoxBtn = styled.div``;
 
 const StCardTextBoxP = styled.p`
-  font-weight: 500;
+  font-weight: 600;
+  color: #878282;
 `;
 
 const StCardPriceBox = styled.div`
