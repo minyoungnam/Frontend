@@ -1,38 +1,6 @@
 import React, { useState, useRef } from "react";
 import { styled } from "styled-components";
-import {
-  TbToolsKitchen2,
-  TbAirConditioning,
-  TbIroning2,
-  TbWashDry1,
-} from "react-icons/tb";
-import {
-  FaWifi,
-  FaTv,
-  FaHotel,
-  FaWarehouse,
-  FaUmbrellaBeach,
-  FaHouseUser,
-  FaSwimmingPool,
-} from "react-icons/fa";
-import { BsHouseFill } from "react-icons/bs";
-import {
-  MdApartment,
-  MdForest,
-  MdCastle,
-  MdHouse,
-  MdHouseSiding,
-} from "react-icons/md";
-import { CgSmartHomeWashMachine } from "react-icons/cg";
-import {
-  GiHeatHaze,
-  GiCampingTent,
-  GiFamilyHouse,
-  GiMushroomHouse,
-  GiTreeSwing,
-} from "react-icons/gi";
-import { RiHotelFill } from "react-icons/ri";
-import { RiAncientGateFill, RiBuilding4Fill } from "react-icons/ri";
+import * as Icons from "../components/Icons";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -301,123 +269,130 @@ const Hosting = () => {
 
   const rooms = [
     {
-      icon: <BsHouseFill size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.BsHouseFill size={25} style={{ marginRight: "10px" }} />,
       name: "house",
     },
     {
-      icon: <MdApartment size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.MdApartment size={25} style={{ marginRight: "10px" }} />,
       name: "apart",
     },
     {
-      icon: <FaWarehouse size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.FaWarehouse size={25} style={{ marginRight: "10px" }} />,
       name: "condo",
     },
     {
-      icon: <FaHotel size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.FaHotel size={25} style={{ marginRight: "10px" }} />,
       name: "hotel",
     },
   ];
 
   const categories = [
     {
-      icon: <FaHouseUser size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.FaHouseUser size={25} style={{ marginRight: "10px" }} />,
       name: "방(전체)",
     },
     {
-      icon: <RiBuilding4Fill size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.RiBuilding4Fill size={25} style={{ marginRight: "10px" }} />,
       name: "최고의 전망",
     },
     {
-      icon: <FaUmbrellaBeach size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.FaUmbrellaBeach size={25} style={{ marginRight: "10px" }} />,
       name: "해변 바로 앞",
     },
     {
-      icon: <RiAncientGateFill size={25} style={{ marginRight: "10px" }} />,
+      icon: (
+        <Icons.RiAncientGateFill size={25} style={{ marginRight: "10px" }} />
+      ),
       name: "한옥",
     },
     {
-      icon: <GiTreeSwing size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.GiTreeSwing size={25} style={{ marginRight: "10px" }} />,
       name: "한적한 시골",
     },
     {
-      icon: <FaSwimmingPool size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.FaSwimmingPool size={25} style={{ marginRight: "10px" }} />,
       name: "멋진 수영장",
     },
     {
-      icon: <MdForest size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.MdForest size={25} style={{ marginRight: "10px" }} />,
       name: "국립공원",
     },
     {
-      icon: <MdCastle size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.MdCastle size={25} style={{ marginRight: "10px" }} />,
       name: "캐슬",
     },
     {
-      icon: <GiMushroomHouse size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.GiMushroomHouse size={25} style={{ marginRight: "10px" }} />,
       name: "기상천외한 숙소",
     },
     {
-      icon: <RiHotelFill size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.RiHotelFill size={25} style={{ marginRight: "10px" }} />,
       name: "료칸",
     },
     {
-      icon: <GiFamilyHouse size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.GiFamilyHouse size={25} style={{ marginRight: "10px" }} />,
       name: "캠핑장",
     },
     {
-      icon: <RiBuilding4Fill size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.RiBuilding4Fill size={25} style={{ marginRight: "10px" }} />,
       name: "저택",
     },
     {
-      icon: <MdHouse size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.MdHouse size={25} style={{ marginRight: "10px" }} />,
       name: "초소형 주택",
     },
     {
-      icon: <MdHouseSiding size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.MdHouseSiding size={25} style={{ marginRight: "10px" }} />,
       name: "통나무집",
     },
   ];
 
   const amenities = [
     {
-      icon: <FaWifi size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.FaWifi size={25} style={{ marginRight: "10px" }} />,
       name: "무선 인터넷",
     },
     {
-      icon: <TbToolsKitchen2 size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.TbToolsKitchen2 size={25} style={{ marginRight: "10px" }} />,
       name: "주방",
     },
     {
       icon: (
-        <CgSmartHomeWashMachine size={25} style={{ marginRight: "10px" }} />
+        <Icons.CgSmartHomeWashMachine
+          size={25}
+          style={{ marginRight: "10px" }}
+        />
       ),
       name: "세탁기",
     },
     {
-      icon: <TbAirConditioning size={25} style={{ marginRight: "10px" }} />,
+      icon: (
+        <Icons.TbAirConditioning size={25} style={{ marginRight: "10px" }} />
+      ),
       name: "에어컨",
     },
     {
-      icon: <GiHeatHaze size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.GiHeatHaze size={25} style={{ marginRight: "10px" }} />,
       name: "난방",
     },
     {
-      icon: <FaTv size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.FaTv size={25} style={{ marginRight: "10px" }} />,
       name: "TV",
     },
     {
-      icon: <TbWashDry1 size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.TbWashDry1 size={25} style={{ marginRight: "10px" }} />,
       name: "건조기",
     },
     {
-      icon: <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.TbIroning2 size={25} style={{ marginRight: "10px" }} />,
       name: "다리미",
     },
     {
-      icon: <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.TbIroning2 size={25} style={{ marginRight: "10px" }} />,
       name: "침실에 딸린 개인 욕실",
     },
     {
-      icon: <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
+      icon: <Icons.TbIroning2 size={25} style={{ marginRight: "10px" }} />,
       name: "업무 전용 공간",
     },
   ];
@@ -625,9 +600,6 @@ const Hosting = () => {
                   justifyContent: "center",
                 }}
               >
-                {/* <CustomFileButton htmlFor="imgUpload">
-                  파일 선택
-                </CustomFileButton> */}
                 <input
                   name="imgUpload"
                   type="file"
