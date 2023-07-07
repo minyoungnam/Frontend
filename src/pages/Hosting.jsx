@@ -180,30 +180,6 @@ const Hosting = () => {
 
       formData.append("content", blob);
 
-      // 블로그에 정리할 것,,,
-      // formData.append('title', data.title);
-      // formData.append('price', Number(data.price));
-      // formData.append('region', data.region);
-      // formData.append('city', data.city);
-      // formData.append('capacity', Number(data.capacity));
-      // formData.append('roomType', data.roomType);
-      // formData.append('amenities', data.amenities);
-      // formData.append('categories', data.categories);
-      // formData.append('expiredDate', Number(data.expiredDate));
-      // formData.append('image',data.image);
-
-      // for (let [key, value] of formData.entries()) { console.log(`${key}:`, value); }
-
-      // const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rooms/host`, formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //     // 'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`
-      //   }
-      // });
-      // console.log(response)
-      // // 성공적인 처리 후의 로직 추가
-
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -225,9 +201,12 @@ const Hosting = () => {
       navigate("/");
     } catch (err) {
       alert("빈칸을 채워주세요");
-      console.log(err);
-      // 에러 처리 로직 추가
+      // console.log(err);
     }
+  };
+
+  const getSelectedValues = (possibleValues, selectedButtons) => {
+    return possibleValues.filter((value) => selectedButtons.includes(value));
   };
 
   const onSubmitHandler = async () => {
@@ -281,15 +260,11 @@ const Hosting = () => {
         image: fileImage,
       };
       await registration(data);
-      // console.log(data)
-    } catch (error) {
-      // 에러 처리 로직 추가
-    }
+    } catch (error) {}
   };
 
   //파일 미리볼 url을 저장해줄 state
   const [fileImage, setFileImage] = useState("");
-  // console.log(fileImage)
   // 파일 저장
   const saveFileImage = async (e) => {
     e.preventDefault(e);
@@ -314,8 +289,7 @@ const Hosting = () => {
       // 성공적인 처리 후의 로직 추가
       console.log(response);
     } catch (error) {
-      // 에러 처리 로직 추가
-      console.error(error);
+      // console.error(error);
     }
   };
 
@@ -324,6 +298,129 @@ const Hosting = () => {
     URL.revokeObjectURL(fileImage);
     setFileImage("");
   };
+
+  const rooms = [
+    {
+      icon: <BsHouseFill size={25} style={{ marginRight: "10px" }} />,
+      name: "house",
+    },
+    {
+      icon: <MdApartment size={25} style={{ marginRight: "10px" }} />,
+      name: "apart",
+    },
+    {
+      icon: <FaWarehouse size={25} style={{ marginRight: "10px" }} />,
+      name: "condo",
+    },
+    {
+      icon: <FaHotel size={25} style={{ marginRight: "10px" }} />,
+      name: "hotel",
+    },
+  ];
+
+  const categories = [
+    {
+      icon: <FaHouseUser size={25} style={{ marginRight: "10px" }} />,
+      name: "방(전체)",
+    },
+    {
+      icon: <RiBuilding4Fill size={25} style={{ marginRight: "10px" }} />,
+      name: "최고의 전망",
+    },
+    {
+      icon: <FaUmbrellaBeach size={25} style={{ marginRight: "10px" }} />,
+      name: "해변 바로 앞",
+    },
+    {
+      icon: <RiAncientGateFill size={25} style={{ marginRight: "10px" }} />,
+      name: "한옥",
+    },
+    {
+      icon: <GiTreeSwing size={25} style={{ marginRight: "10px" }} />,
+      name: "한적한 시골",
+    },
+    {
+      icon: <FaSwimmingPool size={25} style={{ marginRight: "10px" }} />,
+      name: "멋진 수영장",
+    },
+    {
+      icon: <MdForest size={25} style={{ marginRight: "10px" }} />,
+      name: "국립공원",
+    },
+    {
+      icon: <MdCastle size={25} style={{ marginRight: "10px" }} />,
+      name: "캐슬",
+    },
+    {
+      icon: <GiMushroomHouse size={25} style={{ marginRight: "10px" }} />,
+      name: "기상천외한 숙소",
+    },
+    {
+      icon: <RiHotelFill size={25} style={{ marginRight: "10px" }} />,
+      name: "료칸",
+    },
+    {
+      icon: <GiFamilyHouse size={25} style={{ marginRight: "10px" }} />,
+      name: "캠핑장",
+    },
+    {
+      icon: <RiBuilding4Fill size={25} style={{ marginRight: "10px" }} />,
+      name: "저택",
+    },
+    {
+      icon: <MdHouse size={25} style={{ marginRight: "10px" }} />,
+      name: "초소형 주택",
+    },
+    {
+      icon: <MdHouseSiding size={25} style={{ marginRight: "10px" }} />,
+      name: "통나무집",
+    },
+  ];
+
+  const amenities = [
+    {
+      icon: <FaWifi size={25} style={{ marginRight: "10px" }} />,
+      name: "무선 인터넷",
+    },
+    {
+      icon: <TbToolsKitchen2 size={25} style={{ marginRight: "10px" }} />,
+      name: "주방",
+    },
+    {
+      icon: (
+        <CgSmartHomeWashMachine size={25} style={{ marginRight: "10px" }} />
+      ),
+      name: "세탁기",
+    },
+    {
+      icon: <TbAirConditioning size={25} style={{ marginRight: "10px" }} />,
+      name: "에어컨",
+    },
+    {
+      icon: <GiHeatHaze size={25} style={{ marginRight: "10px" }} />,
+      name: "난방",
+    },
+    {
+      icon: <FaTv size={25} style={{ marginRight: "10px" }} />,
+      name: "TV",
+    },
+    {
+      icon: <TbWashDry1 size={25} style={{ marginRight: "10px" }} />,
+      name: "건조기",
+    },
+    {
+      icon: <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
+      name: "다리미",
+    },
+    {
+      icon: <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
+      name: "침실에 딸린 개인 욕실",
+    },
+    {
+      icon: <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
+      name: "업무 전용 공간",
+    },
+  ];
 
   return (
     <>
@@ -504,127 +601,17 @@ const Hosting = () => {
             </InputWrap>
             <Font1>룸 타입(택 1)</Font1>
             <IconContainer>
-              {renderRoomButton(
-                <BsHouseFill size={25} style={{ marginRight: "10px" }} />,
-                "house"
-              )}
-              {renderRoomButton(
-                <MdApartment size={25} style={{ marginRight: "10px" }} />,
-                "apart"
-              )}
-              {renderRoomButton(
-                <FaWarehouse size={25} style={{ marginRight: "10px" }} />,
-                "condo"
-              )}
-              {renderRoomButton(
-                <FaHotel size={25} style={{ marginRight: "10px" }} />,
-                "hotel"
-              )}
+              {rooms.map((item) => renderRoomButton(item.icon, item.name))}
             </IconContainer>
+
             <Font1>카테고리</Font1>
             <IconContainer>
-              {renderRoomButton(
-                <FaHouseUser size={25} style={{ marginRight: "10px" }} />,
-                "방(전체)"
-              )}
-              {renderRoomButton(
-                <RiBuilding4Fill size={25} style={{ marginRight: "10px" }} />,
-                "최고의 전망"
-              )}
-              {renderRoomButton(
-                <FaUmbrellaBeach size={25} style={{ marginRight: "10px" }} />,
-                "해변 바로 앞"
-              )}
-              {renderRoomButton(
-                <RiAncientGateFill size={25} style={{ marginRight: "10px" }} />,
-                "한옥"
-              )}
-              {renderRoomButton(
-                <GiTreeSwing size={25} style={{ marginRight: "10px" }} />,
-                "한적한 시골"
-              )}
-              {renderRoomButton(
-                <FaSwimmingPool size={25} style={{ marginRight: "10px" }} />,
-                "멋진 수영장"
-              )}
-              {renderRoomButton(
-                <MdForest size={25} style={{ marginRight: "10px" }} />,
-                "국립공원"
-              )}
-              {renderRoomButton(
-                <MdCastle size={25} style={{ marginRight: "10px" }} />,
-                "캐슬"
-              )}
-              {renderRoomButton(
-                <GiMushroomHouse size={25} style={{ marginRight: "10px" }} />,
-                "기상천외한 숙소"
-              )}
-              {renderRoomButton(
-                <RiHotelFill size={25} style={{ marginRight: "10px" }} />,
-                "료칸"
-              )}
-              {renderRoomButton(
-                <GiCampingTent size={25} style={{ marginRight: "10px" }} />,
-                "캠핑장"
-              )}
-              {renderRoomButton(
-                <GiFamilyHouse size={25} style={{ marginRight: "10px" }} />,
-                "저택"
-              )}
-              {renderRoomButton(
-                <MdHouse size={25} style={{ marginRight: "10px" }} />,
-                "초소형 주택"
-              )}
-              {renderRoomButton(
-                <MdHouseSiding size={25} style={{ marginRight: "10px" }} />,
-                "통나무집"
-              )}
+              {categories.map((item) => renderRoomButton(item.icon, item.name))}
             </IconContainer>
+
             <Font1>편의 시설</Font1>
             <IconContainer>
-              {renderRoomButton(
-                <FaWifi size={25} style={{ marginRight: "10px" }} />,
-                "무선 인터넷"
-              )}
-              {renderRoomButton(
-                <TbToolsKitchen2 size={25} style={{ marginRight: "10px" }} />,
-                "주방"
-              )}
-              {renderRoomButton(
-                <CgSmartHomeWashMachine
-                  size={25}
-                  style={{ marginRight: "10px" }}
-                />,
-                "세탁기"
-              )}
-              {renderRoomButton(
-                <TbAirConditioning size={25} style={{ marginRight: "10px" }} />,
-                "에어컨"
-              )}
-              {renderRoomButton(
-                <GiHeatHaze size={25} style={{ marginRight: "10px" }} />,
-                "난방"
-              )}
-              {renderRoomButton(
-                <FaTv size={25} style={{ marginRight: "10px" }} />,
-                "TV"
-              )}
-              {renderRoomButton(
-                <TbWashDry1 size={25} style={{ marginRight: "10px" }} />,
-                "건조기"
-              )}
-              {renderRoomButton(
-                <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
-                "다리미"
-              )}
-              {renderRoomButton(
-                <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
-                "침실에 딸린 개인 욕실"
-              )}
-              {renderRoomButton(
-                <TbIroning2 size={25} style={{ marginRight: "10px" }} />,
-                "업무 전용 공간"
-              )}
+              {amenities.map((item) => renderRoomButton(item.icon, item.name))}
             </IconContainer>
 
             <Font1>이미지</Font1>
